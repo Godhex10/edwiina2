@@ -20,10 +20,8 @@
     .loader-bar i{display:block;height:100%;width:40%;border-radius:9px;background:linear-gradient(90deg,#ff7eb6,#ff3d8b);animation:lbar 1s ease-in-out infinite}
     @keyframes lbow{from{transform:rotate(-6deg) scale(.95)}to{transform:rotate(6deg) scale(1.05)}}
     @keyframes lbar{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
-    html.seen .loader{display:none}
   </style>
   <script>
-    try{if(sessionStorage.getItem('eddy-seen'))document.documentElement.classList.add('seen')}catch(e){}
     /* fail-safe: never let the loader get stuck */
     setTimeout(function(){if(!window.__eddyReady){document.documentElement.classList.add('no-js');var l=document.getElementById('loader');if(l)l.classList.add('done')}},3500);
   </script>

@@ -798,17 +798,15 @@ function startReveal() {
 
 $("#year").textContent = new Date().getFullYear();
 
-// Loader: waits for fonts (max 1.5s) — never for images — then fades out.
+// Loader: shows on every page load, waits for fonts (max 1.5s) — never for images — then fades out.
 const loader = $("#loader");
-const seen = document.documentElement.classList.contains("seen");
-const minShow = seen || reduceMotion ? 0 : 700;
+const minShow = reduceMotion ? 0 : 1100;
 const t0 = performance.now();
 Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise((r) => setTimeout(r, 1500))]).then(() => {
   setTimeout(() => {
     window.__eddyReady = true;
     initScroll();
     loader.classList.add("done");
-    try { sessionStorage.setItem("eddy-seen", "1"); } catch {}
     requestAnimationFrame(() => { startReveal(); moveGlider(); });
     setTimeout(() => loader.remove(), 700);
   }, Math.max(0, minShow - (performance.now() - t0)));
