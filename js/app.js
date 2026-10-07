@@ -591,35 +591,35 @@ $("#insta").addEventListener("click", (e) => { const t = e.target.closest("[data
    DECOR — drips, bubbles, footer pool
    ========================================================= */
 function buildDrips() {
-  const band = $("#dripBand");
-  band.innerHTML = "";
+  // each drip and its drop share one timing, so the drop lets go right as the drip is longest
   let x = 10, html = "";
   while (x < innerWidth) {
-    const dw = 14 + Math.random() * 22, dh = 18 + Math.random() * 46;
-    html += `<span class="drip" style="left:${x}px;width:${dw}px;height:${dh}px;animation-duration:${2.5 + Math.random() * 3}s;animation-delay:${-Math.random() * 4}s"></span>`;
-    if (Math.random() < 0.35) {
-      const s = dw * 0.55;
-      html += `<span class="drip-drop" style="left:${x + dw / 2 - s / 2}px;top:${18 + dh}px;width:${s}px;height:${s * 1.2}px;animation-duration:${3 + Math.random() * 4}s;animation-delay:${-Math.random() * 6}s"></span>`;
+    const dw = 14 + Math.random() * 20, dh = 26 + Math.random() * 40;
+    const t = `animation-duration:${(3.5 + Math.random() * 3).toFixed(2)}s;animation-delay:${(-Math.random() * 6).toFixed(2)}s`;
+    html += `<span class="drip" style="left:${x}px;width:${dw}px;height:${dh}px;${t}"></span>`;
+    if (Math.random() < 0.7) {
+      const s = dw * 0.6;
+      html += `<span class="drip-drop" style="left:${x + dw / 2 - s / 2}px;top:${14 + dh * 1.12 - s * 0.6}px;width:${s}px;height:${s * 1.2}px;${t}"></span>`;
     }
-    x += dw + 40 + Math.random() * 100;
+    x += dw + 36 + Math.random() * 90;
   }
-  band.innerHTML = html;
+  $("#drips").innerHTML = html;
 }
-function buildFooterPool() {
-  let x = -40, html = "";
-  while (x < innerWidth + 40) {
-    const w = 80 + Math.random() * 120, h = 20 + Math.random() * 24;
-    html += `<i style="left:${x}px;width:${w}px;height:${h}px"></i>`;
-    x += w * 0.6;
-  }
-  $(".footer-drip").innerHTML = html;
-}
-buildDrips(); buildFooterPool();
+// gloss drops falling into the footer pool (positions in %, so no rebuild on resize)
+const dropCount = isSmall ? 4 : 7;
+$("#poolDrops").innerHTML = Array.from({ length: dropCount }, (_, i) => {
+  const left = ((i + 0.5) / dropCount) * 100 + (Math.random() - 0.5) * 8;
+  const dur = (3.2 + Math.random() * 2.5).toFixed(2), delay = (-Math.random() * 5).toFixed(2);
+  const t = `left:${left.toFixed(1)}%;animation-duration:${dur}s;animation-delay:${delay}s`;
+  return `<span class="pool-drop" style="${t}"></span><span class="pool-ripple" style="${t}"></span>`;
+}).join("");
+
+buildDrips();
 let lastW = innerWidth, rz;
 window.addEventListener("resize", () => {
   if (innerWidth === lastW) return; // ignore mobile URL-bar height changes
   lastW = innerWidth;
-  clearTimeout(rz); rz = setTimeout(() => { buildDrips(); buildFooterPool(); }, 250);
+  clearTimeout(rz); rz = setTimeout(buildDrips, 250);
 });
 if (!reduceMotion) {
   const n = isSmall ? 4 : 8;
@@ -628,6 +628,85 @@ if (!reduceMotion) {
     return `<span class="bubble" style="width:${s}px;height:${s}px;left:${Math.random() * 100}%;animation-duration:${16 + Math.random() * 16}s;animation-delay:${-Math.random() * 30}s"></span>`;
   }).join("");
 }
+
+/* =========================================================
+   BUBBLE TRAIL — glossy bubbles follow the mouse / finger.
+   Drawn on one canvas from pre-rendered sprites, and only
+   animates while bubbles are alive, so it stays cheap.
+   ========================================================= */
+(function bubbleTrail() {
+  if (reduceMotion) return;
+  const cvs = document.createElement("canvas");
+  cvs.className = "trail-canvas";
+  cvs.setAttribute("aria-hidden", "true");
+  document.body.appendChild(cvs);
+  const c = cvs.getContext("2d");
+  let W = 0, H = 0;
+  const size = () => {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    cvs.width = W * dpr; cvs.height = H * dpr;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  size();
+  addEventListener("resize", size);
+
+  const rgba = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; };
+  const sprites = ["#ff3d8b", "#ff7eb6", "#c86bfa", "#ffb38f", "#ff5fa2"].map((tint) => {
+    const s = 72, r = s / 2 - 2, o = document.createElement("canvas");
+    o.width = o.height = s;
+    const g = o.getContext("2d");
+    const body = g.createRadialGradient(s * 0.38, s * 0.34, 1, s / 2, s / 2, r);
+    body.addColorStop(0, "rgba(255,255,255,.85)");
+    body.addColorStop(0.3, "rgba(255,255,255,.18)");
+    body.addColorStop(0.75, rgba(tint, 0.16));
+    body.addColorStop(1, rgba(tint, 0.6));
+    g.fillStyle = body;
+    g.beginPath(); g.arc(s / 2, s / 2, r, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = "rgba(255,255,255,.9)"; g.lineWidth = 1.6; g.stroke();
+    g.fillStyle = "rgba(255,255,255,.95)";
+    g.beginPath(); g.ellipse(s * 0.36, s * 0.3, r * 0.24, r * 0.12, -0.6, 0, Math.PI * 2); g.fill();
+    g.beginPath(); g.arc(s * 0.68, s * 0.7, r * 0.07, 0, Math.PI * 2); g.fill();
+    return o;
+  });
+
+  const parts = [];
+  let raf = 0, lx = null, ly = null;
+  function spawn(x, y, n) {
+    for (let i = 0; i < n; i++) {
+      if (parts.length > 80) parts.shift();
+      parts.push({ x: x + (Math.random() - 0.5) * 12, y: y + (Math.random() - 0.5) * 12, vx: (Math.random() - 0.5) * 0.9, vy: -(Math.random() * 1.3 + 0.4),
+        r: 4 + Math.random() * 11, life: 0, max: 45 + Math.random() * 45, s: sprites[(Math.random() * sprites.length) | 0], w: Math.random() * 60 });
+    }
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+  function tick() {
+    c.clearRect(0, 0, W, H);
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      const k = ++p.life / p.max;
+      if (k >= 1) { parts.splice(i, 1); continue; }
+      p.x += p.vx + Math.sin((p.life + p.w) / 9) * 0.4;  // gentle wobble as they float up
+      p.y += p.vy; p.vy *= 0.995;
+      const r = p.r * (k < 0.15 ? 0.5 + (k / 0.15) * 0.5 : 1 + (k - 0.15) * 0.3);
+      c.globalAlpha = k > 0.7 ? (1 - k) / 0.3 : 1;
+      c.drawImage(p.s, p.x - r, p.y - r, r * 2, r * 2);
+    }
+    c.globalAlpha = 1;
+    if (parts.length) raf = requestAnimationFrame(tick);
+    else { raf = 0; c.clearRect(0, 0, W, H); }
+  }
+  function move(x, y) {
+    if (lx === null) { lx = x; ly = y; return; }
+    const d = Math.hypot(x - lx, y - ly);
+    if (d < 16) return;
+    lx = x; ly = y;
+    spawn(x, y, d > 70 ? 2 : 1);
+  }
+  addEventListener("pointermove", (e) => { if (e.pointerType !== "touch") move(e.clientX, e.clientY); }, { passive: true });
+  addEventListener("touchstart", (e) => { const t = e.touches[0]; if (t) { lx = t.clientX; ly = t.clientY; spawn(lx, ly, 3); } }, { passive: true });
+  addEventListener("touchmove", (e) => { const t = e.touches[0]; if (t) move(t.clientX, t.clientY); }, { passive: true });
+})();
 
 /* =========================================================
    FX — toast, burst, confetti

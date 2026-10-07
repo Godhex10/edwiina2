@@ -51,7 +51,25 @@
   <div class="ambient" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
   <div class="bubbles" id="bubbles" aria-hidden="true"></div>
 
-  <div class="drip-band" id="dripBand" aria-hidden="true"></div>
+  <!-- glossy liquid along the top edge -->
+  <div class="drip-band" aria-hidden="true" data-anim>
+    <div class="drips" id="drips"></div>
+    <svg class="band-wave band-back" viewBox="0 0 2880 44" preserveAspectRatio="none">
+      <path d="M0 0 V30 Q180 40 360 30 T720 30 T1080 30 T1440 30 T1800 30 T2160 30 T2520 30 T2880 30 V0Z" />
+    </svg>
+    <svg class="band-wave band-front" viewBox="0 0 2880 44" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="bandGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#d81b6a" />
+          <stop offset=".6" stop-color="#ff3d8b" />
+          <stop offset="1" stop-color="#ff8cc0" />
+        </linearGradient>
+      </defs>
+      <path fill="url(#bandGrad)" d="M0 0 V24 Q240 34 480 24 T960 24 T1440 24 T1920 24 T2400 24 T2880 24 V0Z" />
+      <path class="band-shine" d="M0 10 Q240 18 480 10 T960 10 T1440 10 T1920 10 T2400 10 T2880 10" />
+    </svg>
+    <div class="band-glare"></div>
+  </div>
 
   <!-- ============ NAV ============ -->
   <header class="nav" id="nav">
@@ -345,8 +363,26 @@
   </main>
 
   <!-- ============ FOOTER ============ -->
-  <footer class="footer">
-    <div class="footer-drip" aria-hidden="true"></div>
+  <footer class="footer" data-anim>
+    <!-- animated pool of gloss along the top of the footer -->
+    <div class="footer-drip" aria-hidden="true">
+      <svg class="pool pool-back" viewBox="0 0 2880 90" preserveAspectRatio="none">
+        <path d="M0 38 Q180 8 360 38 T720 38 T1080 38 T1440 38 T1800 38 T2160 38 T2520 38 T2880 38 V90 H0Z" />
+      </svg>
+      <svg class="pool pool-front" viewBox="0 0 2880 90" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="poolGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ff8cc0" />
+            <stop offset=".45" stop-color="#ff3d8b" />
+            <stop offset="1" stop-color="#ff3d8b" />
+          </linearGradient>
+        </defs>
+        <path fill="url(#poolGrad)" d="M0 50 Q240 22 480 50 T960 50 T1440 50 T1920 50 T2400 50 T2880 50 V90 H0Z" />
+        <path class="pool-shine" d="M0 55 Q240 27 480 55 T960 55 T1440 55 T1920 55 T2400 55 T2880 55" />
+      </svg>
+      <div class="pool-glare"></div>
+      <div id="poolDrops"></div>
+    </div>
     <div class="footer-inner">
       <div class="footer-brand">
         <span class="logo-word big">Eddies</span>

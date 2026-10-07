@@ -23,11 +23,11 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-tap-highlight-color: transparent; overflow-x: clip; }
+html { -webkit-tap-highlight-color: transparent; overflow-x: hidden; overflow-x: clip; }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
-body { font-family: var(--sans); color: var(--ink); background: var(--blush); overflow-x: clip; line-height: 1.6; }
+body { font-family: var(--sans); color: var(--ink); background: var(--blush); overflow-x: hidden; overflow-x: clip; line-height: 1.6; }
 body.locked { overflow: hidden; }
 img, svg { display: block; }
 img { max-width: 100%; }
@@ -62,20 +62,38 @@ button { background: none; border: 0; cursor: pointer; }
 }
 
 /* ---------- drip band ---------- */
-.drip-band { position: absolute; top: 0; left: 0; right: 0; height: 26px; z-index: 5; pointer-events: none;
-  background: linear-gradient(180deg, var(--deep), var(--hot)); }
-.drip-band::after { content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 4px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent); }
-.drip { position: absolute; top: 20px; transform-origin: top; will-change: transform;
-  background: linear-gradient(90deg, var(--deep), var(--hot) 45%, #ff76ad 60%, var(--hot));
-  border-radius: 0 0 999px 999px; animation: dripGrow ease-in-out infinite alternate; }
-.drip::before { content: ""; position: absolute; left: 25%; top: 10%; width: 22%; height: 55%; border-radius: 99px; background: rgba(255,255,255,.5); }
-.drip-drop { position: absolute; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; will-change: transform, opacity;
-  background: radial-gradient(circle at 35% 30%, #ffd0e3 0 15%, var(--hot) 45%, var(--deep)); animation: dropFall ease-in infinite; }
-@keyframes dripGrow { from { transform: scaleY(.55); } to { transform: scaleY(1.15); } }
+.drip-band { position: absolute; top: 0; left: 0; right: 0; height: 340px; z-index: 5; pointer-events: none; overflow: hidden; }
+/* flowing liquid edge (two wave layers sliding at different speeds) */
+.band-wave { position: absolute; top: 0; left: 0; width: 200%; height: 44px; will-change: transform; }
+.band-back { fill: var(--deep); opacity: .55; animation: poolSlide 11s linear infinite reverse; }
+.band-front { animation: poolSlide 7s linear infinite; filter: drop-shadow(0 4px 6px rgba(216,27,106,.3)); }
+.band-shine { fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; opacity: .65; vector-effect: non-scaling-stroke; stroke-dasharray: 160 70 24 70; }
+.band-glare { position: absolute; top: 0; left: 0; width: 22%; height: 30px; will-change: transform;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,.55), transparent 65%); animation: glare 6s ease-in-out infinite; }
+/* drips swell, let go of a drop, then snap back */
+.drips { position: absolute; inset: 0; }
+.drip { position: absolute; top: 14px; transform-origin: top; will-change: transform; overflow: hidden;
+  background: linear-gradient(90deg, var(--deep), var(--hot) 40%, #ff8cc0 58%, var(--hot) 80%, var(--deep));
+  border-radius: 0 0 999px 999px; animation: dripCycle cubic-bezier(.45, 0, .55, 1) infinite; }
+.drip::before { content: ""; position: absolute; left: 24%; top: 8%; width: 20%; height: 70%; border-radius: 99px; background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.15)); }
+.drip::after { content: ""; position: absolute; left: 0; right: 0; height: 40%; top: -40%;
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,.45), transparent); animation: dripGleam 2.6s ease-in-out infinite; animation-delay: inherit; }
+@keyframes dripCycle {
+  0% { transform: scaleY(.4); }
+  58% { transform: scaleY(1.12) scaleX(.94); }
+  64% { transform: scaleY(.5) scaleX(1.04); }
+  74% { transform: scaleY(.62); }
+  100% { transform: scaleY(.4); }
+}
+@keyframes dripGleam { 0% { transform: translateY(0); } 60%, 100% { transform: translateY(380%); } }
+.drip-drop { position: absolute; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; will-change: transform, opacity; opacity: 0;
+  background: radial-gradient(circle at 35% 30%, #fff 0 10%, #ffb3d1 25%, var(--hot) 55%, var(--deep)); box-shadow: 0 4px 8px -2px rgba(216,27,106,.45);
+  animation: dropFall cubic-bezier(.5, 0, .9, .6) infinite; }
 @keyframes dropFall {
-  0%, 60% { transform: translateY(0) scale(0); opacity: 0; }
-  65% { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(220px) scale(.7); opacity: 0; }
+  0%, 54% { transform: translateY(-6px) scale(.3, .5); opacity: 0; }
+  58% { transform: translateY(0) scale(.9, 1.15); opacity: 1; }
+  62% { transform: translateY(6px) scale(1, 1.1); opacity: 1; }
+  100% { transform: translateY(260px) scale(.75, 1.25); opacity: 0; }
 }
 
 /* ---------- nav ---------- */
@@ -406,8 +424,35 @@ button { background: none; border: 0; cursor: pointer; }
 
 /* ---------- footer ---------- */
 .footer { position: relative; margin-top: 120px; color: #fff; background: linear-gradient(180deg, var(--hot), var(--deep) 60%, var(--berry)); }
-.footer-drip { position: absolute; left: 0; right: 0; top: -40px; height: 42px; overflow: hidden; }
-.footer-drip i { position: absolute; bottom: 0; border-radius: 999px 999px 0 0; background: var(--hot); }
+.footer-drip { position: absolute; left: 0; right: 0; top: -88px; height: 90px; overflow: hidden; pointer-events: none; }
+.pool { position: absolute; left: 0; bottom: 0; width: 200%; height: 100%; will-change: transform; }
+.pool-back { fill: #ff7eb6; opacity: .55; animation: poolSlide 14s linear infinite reverse; }
+.pool-front { animation: poolSlide 9s linear infinite; }
+.pool-shine { fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; opacity: .6; vector-effect: non-scaling-stroke; stroke-dasharray: 140 60 20 60; }
+@keyframes poolSlide { to { transform: translate3d(-50%, 0, 0); } }
+/* a soft band of light gliding across the gloss */
+.pool-glare { position: absolute; left: 0; bottom: 0; width: 30%; height: 60%; will-change: transform;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,.45), transparent 65%);
+  animation: glare 7s ease-in-out infinite; }
+@keyframes glare { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(400%, 0, 0); } }
+/* gloss drops falling into the pool + ripples */
+.pool-drop { position: absolute; top: 0; width: 14px; height: 18px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 35% 30%, #fff 0 12%, #ff8cc0 35%, var(--hot) 70%, var(--deep));
+  box-shadow: 0 4px 8px -2px rgba(216,27,106,.5); opacity: 0; will-change: transform, opacity; animation: poolDrop ease-in infinite; }
+@keyframes poolDrop {
+  0% { transform: translate3d(0, -30px, 0) scale(.4, .6); opacity: 0; }
+  10% { opacity: 1; transform: translate3d(0, -10px, 0) scale(.9, 1.1); }
+  48% { transform: translate3d(0, 48px, 0) scale(.85, 1.25); opacity: 1; }
+  55%, 100% { transform: translate3d(0, 56px, 0) scale(1.4, .3); opacity: 0; }
+}
+.pool-ripple { position: absolute; top: 58px; width: 46px; height: 12px; margin-left: -16px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.75); opacity: 0; will-change: transform, opacity; animation: poolRipple ease-out infinite; }
+@keyframes poolRipple {
+  0%, 50% { transform: scale(.2); opacity: 0; }
+  54% { opacity: .9; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+.trail-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 89; }
 .footer-inner { width: min(1240px, 100%); margin: 0 auto; padding: 70px 32px 40px; display: grid; grid-template-columns: 1fr 1.4fr; gap: 40px; }
 .logo-word.big { font-size: 64px; color: #fff; }
 .footer-brand p { opacity: .88; margin: 6px 0 20px; max-width: 340px; }
@@ -511,7 +556,8 @@ button { background: none; border: 0; cursor: pointer; }
   .nav-links a { padding: 8px 10px; font-size: 13px; }
 }
 @media (max-width: 1024px) {
-  .hero { grid-template-columns: 1fr; text-align: center; padding-top: 140px; }
+  .hero { grid-template-columns: minmax(0, 1fr); text-align: center; padding-top: 140px; }
+  .hero-copy, .hero-stage { min-width: 0; }
   .hero-copy { display: grid; justify-items: center; }
   .lead { margin: 0 auto; }
   .hero-ctas, .hero-stats { justify-content: center; }
@@ -527,6 +573,7 @@ button { background: none; border: 0; cursor: pointer; }
   .nav { top: 30px; padding: 8px 8px 8px 16px; }
   .logo-word { font-size: 28px; }
   .logo-bow { width: 30px; height: 24px; }
+  .logo-tag { font-size: 8px; letter-spacing: .16em; white-space: nowrap; }
   .burger { display: block; }
   .nav-links { position: absolute; top: calc(100% + 10px); left: 0; right: 0; flex-direction: column; gap: 4px; padding: 12px;
     border-radius: 28px; background: #fff; box-shadow: var(--shadow); border: 1.5px solid #fff;
@@ -601,10 +648,29 @@ button { background: none; border: 0; cursor: pointer; }
   .drawer { top: auto; left: 0; right: 0; bottom: 0; width: 100%; height: 88vh; border-radius: 30px 30px 0 0; transform: translate3d(0, 105%, 0); }
 }
 @media (max-width: 400px) {
+  .hero h1 { font-size: 42px; }
+  .lead { font-size: 15.5px; }
+  .hero-ctas { gap: 10px; }
+  .hero-ctas .btn { padding: 14px 22px; font-size: 14px; }
+  .hero { padding-bottom: 24px; }
+  .hero-stage { height: 410px; }
+  .collage { transform: scale(.86); transform-origin: 50% 30%; }
+  .ring-text { width: 330px; height: 330px; }
+  .halo { width: 290px; height: 290px; }
+  .float-chip { font-size: 10.5px; }
   .feature-grid { grid-template-columns: 1fr; }
   .vibe-label strong { font-size: 16px; }
 }
 
+@media (max-width: 350px) {
+  .hero h1 { font-size: 37px; }
+  .hero-stage { height: 390px; }
+  .collage { transform: scale(.76); }
+  .hero-stats li { padding: 8px 6px; }
+  .hero-stats strong { font-size: 16px; }
+  .nav { padding-left: 12px; }
+  .logo-tag { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .reveal { opacity: 1; transform: none; }
