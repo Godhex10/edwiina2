@@ -701,3 +701,98 @@ button { background: none; border: 0; cursor: pointer; }
 .foot-heart { color: #ffc6dd; }
 .toast { display: flex; align-items: center; gap: 10px; }
 .toast i { color: #ff8cc0; font-size: 15px; flex-shrink: 0; }
+
+/* tablets: three products per row instead of two oversized ones */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .card-name { font-size: 16px; }
+  .section { padding-top: 84px; }
+}
+
+/* =========================================================
+   PHONE POLISH — tighter, shorter, swipeable
+   (kept last so it overrides the earlier breakpoints)
+   ========================================================= */
+@media (max-width: 640px) {
+  /* tighter section rhythm */
+  .section { padding: 58px 16px 6px; }
+  .section-head { margin-bottom: 24px; }
+  .section-head h2, .news h2, .drop-copy h2 { font-size: 32px; margin: 6px 0 8px; }
+  .section-head p { font-size: 14px; }
+  .kicker { font-size: 11px; letter-spacing: .24em; }
+
+  /* category tiles → one swipeable row */
+  .vibes { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; margin: 0 -16px; padding: 4px 16px 14px;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .vibes::-webkit-scrollbar { display: none; }
+  .vibe { flex: 0 0 40%; aspect-ratio: 3 / 4; border-radius: 20px; scroll-snap-align: start; }
+  .vibe-label { left: 12px; right: 12px; bottom: 12px; }
+  .vibe-label strong { font-size: 15px; }
+  .vibe-label span { font-size: 11px; }
+  .vibe-go { display: none; }
+
+  /* compact product cards */
+  .grid { gap: 10px; }
+  .card { padding: 6px; border-radius: 18px; }
+  .card-body { padding: 9px 4px 3px; }
+  .card-cat { display: block; font-size: 9.5px; letter-spacing: .08em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-name { font-size: 13.5px; margin: 2px 0 4px; }
+  .dots { height: 12px; font-size: 10px; }
+  .dots i { width: 10px; height: 10px; }
+  .dots:empty { display: none; }
+  .card-foot { flex-direction: row; align-items: center; gap: 6px; margin-top: 8px; }
+  .price { font-size: 16px; }
+  .price small { display: block; font-size: 9.5px; line-height: 1; margin: 0 0 2px; }
+  .add { width: 36px; height: 36px; padding: 0; border-radius: 50%; font-size: 0; gap: 0; flex-shrink: 0; justify-content: center; }
+  .add i { font-size: 13px; }
+  .add:disabled { width: auto; padding: 0 10px; border-radius: 99px; font-size: 10.5px; }
+  .heart { width: 30px; height: 30px; }
+  .heart i { font-size: 14px; }
+  .badge { top: 8px; left: 8px; padding: 3px 8px; font-size: 10px; }
+  .grid-more { margin-top: 26px; }
+
+  /* shop tools */
+  .shop-tools { gap: 8px; }
+  .search { height: 46px; }
+  .filters { margin-bottom: 22px; }
+
+  /* swipe-it-on */
+  .lips-card { min-height: 0; padding: 26px 12px; border-radius: 26px; }
+  .shade-wrap { gap: 18px; }
+  .shade-swatches { gap: 10px; justify-content: center; }
+  .swatch { width: 40px; height: 40px; }
+
+  /* gloss lab: shorter */
+  .drop-card { padding: 30px 18px 24px; border-radius: 28px; gap: 18px; }
+  .drop-copy p { font-size: 14px; }
+  .lab-list { gap: 6px; margin: 16px 0 18px; }
+  .lab-list li { font-size: 11.5px; padding: 5px 11px; }
+  .lab-ctas { gap: 8px; }
+  .lab-ctas .btn { padding: 13px 18px; font-size: 14px; }
+  .drop-visual { height: 230px; }
+  .lab-photo { width: 150px; left: auto; right: 6%; margin-left: 0; top: 0; }
+  .lab-photo-2 { width: 104px; left: 6%; bottom: 0; }
+  .drop-liquid { height: 90px; }
+
+  /* how to order: compact rows, icon beside the text */
+  .features { padding-top: 58px; }
+  .feature-grid { grid-template-columns: 1fr; gap: 10px; }
+  .feature { display: grid; grid-template-columns: 46px 1fr; column-gap: 14px; align-items: start; padding: 14px 16px; border-radius: 20px; }
+  .feature:hover { transform: none; }
+  .f-num { width: 46px; height: 46px; margin: 0; border-radius: 14px; grid-row: span 2; }
+  .f-num i { font-size: 18px; }
+  .f-num b { width: 18px; height: 18px; font-size: 10px; top: -5px; right: -5px; }
+  .feature h4 { font-size: 16.5px; margin: 1px 0 2px; }
+  .feature p { font-size: 13px; }
+
+  /* lookbook + contact + footer */
+  .insta-tile { border-radius: 18px; }
+  .news { padding: 40px 18px 34px; border-radius: 28px; }
+  .news-bow { width: 70px; height: 56px; }
+  .news p { font-size: 14px; margin-bottom: 20px; }
+  .contact-ctas .btn { width: 100%; }
+  .footer { margin-top: 90px; }
+  .footer-inner { padding: 40px 18px 26px; gap: 26px; }
+  .logo-word.big { font-size: 48px; }
+  .footer-cols a { font-size: 13.5px; }
+}
