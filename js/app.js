@@ -17,6 +17,7 @@ const isSmall = matchMedia("(max-width: 640px)").matches;
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const money = (n) => CONFIG.currency + Number(n).toLocaleString("en-NG");
+const fa = (cls) => `<i class="${cls}" aria-hidden="true"></i>`;
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 /* ---------- images (resized via Bumpa's CDN, falls back to the original) ---------- */
@@ -162,8 +163,8 @@ if (finePointer && !reduceMotion) {
 }
 
 /* marquee */
-const mq = ["🎀 bow clips", "✦ satin bonnets", "💋 pout by eddy", "✦ silk scarves", "🌸 flower clips", "✦ scrunchies", "🧴 gloss lab", "✦ pretty girls shop here"];
-$("#marqueeTrack").innerHTML = [...mq, ...mq].map((t) => `<span>${t}</span>`).join("");
+const mq = [["fa-heart", "bow clips"], ["fa-star", "satin bonnets"], ["fa-face-kiss-wink-heart", "pout by eddy"], ["fa-gem", "silk scarves"], ["fa-spa", "flower clips"], ["fa-star", "scrunchies"], ["fa-flask", "gloss lab"], ["fa-crown", "pretty girls shop here"]];
+$("#marqueeTrack").innerHTML = [...mq, ...mq].map(([ic, t]) => `<span>${fa("fa-solid " + ic)} ${t}</span>`).join("");
 
 /* =========================================================
    CATEGORY TILES
@@ -172,7 +173,7 @@ $("#vibeGrid").innerHTML = CAT_ORDER.map((c) => {
   const cat = CATS[c], p = byId[cat.img];
   return `<a href="#shop" class="vibe reveal" data-cat="${c}">
     ${p ? img(p, 480, cat.label) : ""}
-    <span class="vibe-go">→</span>
+    <span class="vibe-go">${fa("fa-solid fa-arrow-right")}</span>
     <span class="vibe-label"><strong>${cat.label}</strong><span><em class="vb" style="font-style:normal">${cat.blurb} · </em>${catCount(c)} items</span></span>
   </a>`;
 }).join("");
@@ -212,6 +213,7 @@ function currentList() {
   return list;
 }
 
+const ADD_LABEL = fa("fa-solid fa-plus") + " Add";
 function cardHTML(p) {
   const out = p.q <= 0, low = !out && p.q <= 3;
   const swatches = (p.v || []).map((v) => colorOf(v[0])).filter(Boolean);
@@ -222,7 +224,7 @@ function cardHTML(p) {
     <div class="card-media">
       ${out ? `<span class="badge out">Sold out</span>` : low ? `<span class="badge low">Only ${p.q} left</span>` : ""}
       <button class="heart ${wish.has(p.id) ? "on" : ""}" data-wish="${p.id}" aria-label="Save ${esc(p.n)}">
-        <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3 4.5 6.6 4.5c2.1 0 3.6 1.2 4.4 2.6.8-1.4 2.3-2.6 4.4-2.6 3.6 0 5.7 3.7 4.2 7.2C19.5 16.4 12 21 12 21z"/></svg>
+        ${fa("fa-regular fa-heart off")}${fa("fa-solid fa-heart on-i")}
       </button>
       ${img(p, isSmall ? 360 : 460)}
     </div>
@@ -232,7 +234,7 @@ function cardHTML(p) {
       ${dots}
       <div class="card-foot">
         <span class="price">${priceLabel(p)}</span>
-        <button class="add" data-add="${p.id}" ${out ? "disabled" : ""}>${out ? "Sold out" : hasVariants(p) && p.v.length > 1 ? "Choose ✨" : "+ Add"}</button>
+        <button class="add" data-add="${p.id}" ${out ? "disabled" : ""}>${out ? "Sold out" : hasVariants(p) && p.v.length > 1 ? fa("fa-solid fa-palette") + " Choose" : ADD_LABEL}</button>
       </div>
     </div>
   </article>`;
@@ -244,7 +246,7 @@ function renderGrid(append = false) {
   const slice = list.slice(from, view.shown);
   if (!append) grid.innerHTML = "";
   if (!list.length) {
-    grid.innerHTML = `<div class="empty-grid"><b>🥺</b>${view.filter === "wish" ? "No saved faves yet — tap the 💗 on anything you love." : "Nothing matches that search, pretty. Try another word?"}</div>`;
+    grid.innerHTML = `<div class="empty-grid"><b>${fa("fa-regular fa-face-sad-tear")}</b>${view.filter === "wish" ? `No saved faves yet — tap the ${fa("fa-solid fa-heart")} on anything you love.` : "Nothing matches that search, pretty. Try another word?"}</div>`;
   } else {
     grid.insertAdjacentHTML("beforeend", slice.map(cardHTML).join(""));
     $$("img", grid).forEach((im) => im.complete && im.naturalWidth && im.classList.add("ok"));
@@ -253,7 +255,7 @@ function renderGrid(append = false) {
   const shown = Math.min(view.shown, list.length);
   $("#gridCount").textContent = list.length ? `Showing ${shown} of ${list.length} pretty things` : "";
   $("#loadMore").hidden = shown >= list.length;
-  $("#shopSub").textContent = view.filter === "wish" ? "Your saved faves 💗" :
+  $("#shopSub").innerHTML = view.filter === "wish" ? `Your saved faves ${fa("fa-solid fa-heart")}` :
     view.filter === "all" ? "Tap any item to pick your colour." : `${CATS[view.filter].label} — ${CATS[view.filter].blurb.toLowerCase()}.`;
 }
 
@@ -293,9 +295,9 @@ grid.addEventListener("click", (e) => {
     const p = byId[add.dataset.add];
     if (hasVariants(p) && p.v.length > 1) return openModal(p.id);
     addToCart(p.id, hasVariants(p) ? 0 : -1, 1, add);
-    add.classList.add("added"); add.textContent = "✓ Added";
+    add.classList.add("added"); add.innerHTML = fa("fa-solid fa-check") + " Added";
     clearTimeout(add._t);
-    add._t = setTimeout(() => { add.classList.remove("added"); add.textContent = "+ Add"; }, 1400);
+    add._t = setTimeout(() => { add.classList.remove("added"); add.innerHTML = ADD_LABEL; }, 1400);
     return;
   }
   const card = e.target.closest(".card");
@@ -340,7 +342,7 @@ function toggleWish(id, btn) {
   save("eddy-wish", [...wish]);
   btn.classList.toggle("on", on);
   updateWishCount(true);
-  toast(on ? `💗 Saved ${byId[id].n}` : "Removed from your faves");
+  toast(on ? `Saved ${byId[id].n}` : "Removed from your faves", on ? "fa-solid fa-heart" : "fa-solid fa-heart-crack");
   if (on) burst(btn);
 }
 $("#wishBtn").addEventListener("click", () => { setFilter("wish"); scrollToEl($("#shop")); });
@@ -362,7 +364,7 @@ const cartTotal = () => Object.entries(cart).reduce((s, [k, q]) => s + lineInfo(
 function addToCart(id, vi = -1, qty = 1, srcEl) {
   const k = `${id}::${vi}`, info = lineInfo(k);
   const max = info.stock > 0 ? info.stock : 99;
-  if ((cart[k] || 0) >= max) return toast(`Only ${max} available, pretty 🥺`);
+  if ((cart[k] || 0) >= max) return toast(`Only ${max} available, pretty`, "fa-solid fa-circle-exclamation");
   cart[k] = Math.min(max, (cart[k] || 0) + qty);
   save("eddy-cart", cart);
   if (srcEl) flyToBag(srcEl);
@@ -371,7 +373,7 @@ function addToCart(id, vi = -1, qty = 1, srcEl) {
     const bag = $("#bagBtn"); bag.classList.remove("bump"); void bag.offsetWidth; bag.classList.add("bump");
     const c = $("#bagCount"); c.classList.remove("pop"); void c.offsetWidth; c.classList.add("pop");
   }, srcEl && !reduceMotion ? 700 : 0);
-  toast(`🛍️ ${info.name}${info.opt ? " (" + info.opt + ")" : ""} added to your bag`);
+  toast(`${info.name}${info.opt ? " (" + info.opt + ")" : ""} added to your bag`, "fa-solid fa-bag-shopping");
 }
 
 function flyToBag(el) {
@@ -395,7 +397,7 @@ function renderCart() {
   $("#subtotal").textContent = money(cartTotal());
   const items = $("#drawerItems");
   if (!cartCount()) {
-    items.innerHTML = `<div class="empty"><span class="big-emoji">🛍️</span><h4>Your bag is feeling empty</h4><p>Let's fix that, pretty.</p><br><button class="btn btn-gloss btn-sm" data-shopnow><span>Start shopping</span></button></div>`;
+    items.innerHTML = `<div class="empty"><span class="big-emoji">${fa("fa-solid fa-bag-shopping")}</span><h4>Your bag is feeling empty</h4><p>Let's fix that, pretty.</p><br><button class="btn btn-gloss btn-sm" data-shopnow><span>Start shopping</span></button></div>`;
     return;
   }
   items.innerHTML = Object.entries(cart).map(([k, q]) => {
@@ -403,7 +405,7 @@ function renderCart() {
     return `<div class="line" data-line="${k}">
       <div class="line-media">${img(L.p, 160)}</div>
       <div><h4>${esc(L.name)}</h4>${L.opt ? `<div class="opt">${esc(L.opt)}</div>` : ""}<div class="lp">${money(L.price * q)}</div><button class="remove" data-remove="${k}">remove</button></div>
-      <div class="qty"><button data-dec="${k}" aria-label="Decrease">−</button><span>${q}</span><button data-inc="${k}" aria-label="Increase">+</button></div>
+      <div class="qty"><button data-dec="${k}" aria-label="Decrease">${fa("fa-solid fa-minus")}</button><span>${q}</span><button data-inc="${k}" aria-label="Increase">${fa("fa-solid fa-plus")}</button></div>
     </div>`;
   }).join("");
 }
@@ -413,7 +415,7 @@ $("#drawerItems").addEventListener("click", (e) => {
   if (t.hasAttribute("data-shopnow")) { closeDrawer(); return scrollToEl($("#shop")); }
   const k = t.dataset.inc || t.dataset.dec || t.dataset.remove;
   if (!k) return;
-  if (t.dataset.inc) { const s = lineInfo(k).stock; if (s > 0 && cart[k] >= s) return toast(`Only ${s} available 🥺`); cart[k]++; }
+  if (t.dataset.inc) { const s = lineInfo(k).stock; if (s > 0 && cart[k] >= s) return toast(`Only ${s} available`, "fa-solid fa-circle-exclamation"); cart[k]++; }
   if (t.dataset.dec) cart[k]--;
   if (t.dataset.remove || cart[k] <= 0) {
     t.closest(".line").classList.add("out");
@@ -430,7 +432,7 @@ $("#closeDrawer").addEventListener("click", closeDrawer);
 scrim.addEventListener("click", closeDrawer);
 
 $("#checkoutBtn").addEventListener("click", () => {
-  if (!cartCount()) return toast("Your bag is empty — go treat yourself 💕");
+  if (!cartCount()) return toast("Your bag is empty — go treat yourself", "fa-solid fa-bag-shopping");
   const lines = Object.entries(cart).map(([k, q]) => {
     const L = lineInfo(k);
     return `• ${q} × ${L.name}${L.opt ? " (" + L.opt + ")" : ""} — ${money(L.price * q)}`;
@@ -460,7 +462,7 @@ function selectVar(i) {
   const stock = v ? v[2] : p.q;
   stockLabel(stock);
   $("#modalAdd").disabled = stock <= 0 || (hasVariants(p) && i < 0);
-  $("#modalAdd span").textContent = stock <= 0 ? "Sold out" : hasVariants(p) && i < 0 ? "Pick an option ↑" : "Add to bag";
+  $("#modalAdd span").textContent = stock <= 0 ? "Sold out" : hasVariants(p) && i < 0 ? "Pick an option first" : "Add to bag";
 }
 function openModal(id) {
   const p = byId[id];
@@ -584,7 +586,7 @@ $("#labShop").addEventListener("click", () => { setFilter("lab"); scrollToEl($("
    ========================================================= */
 const LOOK = [5427404, 5411060, 5389759, 5427411, 5411175, 5427161].map((id) => byId[id]).filter(Boolean);
 $("#insta").innerHTML = LOOK.map((p) =>
-  `<button class="insta-tile reveal" data-look="${p.id}" aria-label="${esc(p.n)}">${img(p, 400)}<span class="ig-over">${esc(p.n)}<br>Shop it →</span></button>`).join("");
+  `<button class="insta-tile reveal" data-look="${p.id}" aria-label="${esc(p.n)}">${img(p, 400)}<span class="ig-over">${esc(p.n)}<br>Shop it ${fa("fa-solid fa-arrow-right")}</span></button>`).join("");
 $("#insta").addEventListener("click", (e) => { const t = e.target.closest("[data-look]"); if (t) openModal(+t.dataset.look); });
 
 /* =========================================================
@@ -711,9 +713,9 @@ if (!reduceMotion) {
 /* =========================================================
    FX — toast, burst, confetti
    ========================================================= */
-function toast(msg) {
+function toast(msg, icon = "fa-solid fa-heart") {
   const host = $("#toasts"), t = document.createElement("div");
-  t.className = "toast"; t.textContent = msg;
+  t.className = "toast"; t.innerHTML = fa(icon) + `<span>${esc(msg)}</span>`;
   host.appendChild(t);
   while (host.children.length > 2) host.firstChild.remove();
   setTimeout(() => t.remove(), 3100);

@@ -6,7 +6,7 @@
   <title>Accessories by Eddy · Pretty girls shop here</title>
   <meta name="description" content="Accessories by Eddy — hair clips, bonnets, silk scarves, scrunchies, Pout by Eddy lip gloss and DIY gloss supplies. Be a girlie girl." />
   <meta name="theme-color" content="#ff3d8b" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎀</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160'><path fill='%23ff7eb6' d='M100 70 C70 30 20 20 20 60 C20 95 70 95 100 75Z M100 70 C130 30 180 20 180 60 C180 95 130 95 100 75Z'/><path fill='%23ff3d8b' d='M95 78 L70 140 L85 135 L92 148 L100 82Z M105 78 L130 140 L115 135 L108 148 L100 82Z'/><ellipse cx='100' cy='73' rx='15' ry='17' fill='%23ff3d8b'/></svg>" />
 
   <!-- Loader styles inline so it paints on the very first frame -->
   <style>
@@ -32,6 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://getbumpa.com" />
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -93,11 +94,11 @@
 
     <div class="nav-actions">
       <button class="icon-btn" id="wishBtn" aria-label="Wishlist">
-        <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3 4.5 6.6 4.5c2.1 0 3.6 1.2 4.4 2.6.8-1.4 2.3-2.6 4.4-2.6 3.6 0 5.7 3.7 4.2 7.2C19.5 16.4 12 21 12 21z"/></svg>
+        <i class="fa-regular fa-heart" aria-hidden="true"></i>
         <span class="count" id="wishCount">0</span>
       </button>
       <button class="icon-btn bag-btn" id="bagBtn" aria-label="Open shopping bag">
-        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3" fill="none"/></svg>
+        <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
         <span class="count" id="bagCount">0</span>
       </button>
       <button class="burger" id="burger" aria-label="Menu"><span></span><span></span></button>
@@ -115,13 +116,13 @@
           girl, <em>always.</em>
         </h1>
         <p class="lead reveal">Bows, bonnets, silk scarves, claw clips and our own <strong>Pout by Eddy</strong> glosses —
-          everything a pretty girl needs, all in one place. Pretty girls shop here 🛍️</p>
+          everything a pretty girl needs, all in one place. Pretty girls shop here <i class="fa-solid fa-bag-shopping inline-ic" aria-hidden="true"></i></p>
         <div class="hero-ctas reveal">
           <a href="#shop" class="btn btn-gloss">
             <span>Shop the cute stuff</span>
-            <svg viewBox="0 0 24 24" class="arrow"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            <i class="fa-solid fa-arrow-right arrow" aria-hidden="true"></i>
           </a>
-          <a href="#" class="btn btn-glass" data-wa>Chat on WhatsApp 💬</a>
+          <a href="#" class="btn btn-glass" data-wa><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp</a>
         </div>
         <ul class="hero-stats reveal">
           <li><strong id="statCount">150+</strong><span>pretty things</span></li>
@@ -179,8 +180,8 @@
           </g>
         </svg>
 
-        <div class="float-chip chip-1"><span>🎀</span> New bows just dropped</div>
-        <div class="float-chip chip-2"><span>💋</span> Pout by Eddy</div>
+        <div class="float-chip chip-1"><span class="chip-ic"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></span> New bows just dropped</div>
+        <div class="float-chip chip-2"><span class="chip-ic"><i class="fa-solid fa-face-kiss-wink-heart" aria-hidden="true"></i></span> Pout by Eddy</div>
       </div>
     </section>
 
@@ -209,7 +210,7 @@
 
       <div class="shop-tools reveal">
         <label class="search">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
           <input id="search" type="search" placeholder="Search bonnets, clips, gloss…" autocomplete="off" />
         </label>
         <select id="sort" aria-label="Sort products">
@@ -227,7 +228,7 @@
       <div class="grid" id="grid"></div>
       <div class="grid-more">
         <p id="gridCount"></p>
-        <button class="btn btn-glass" id="loadMore">Show me more ✨</button>
+        <button class="btn btn-glass" id="loadMore"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Show me more</button>
       </div>
     </section>
 
@@ -276,7 +277,7 @@
               <p id="shadeVibe"></p>
               <div class="shade-row">
                 <span class="price" id="shadePrice"></span>
-                <button class="btn btn-gloss btn-sm" id="shadeAdd"><span>Add to bag</span></button>
+                <button class="btn btn-gloss btn-sm" id="shadeAdd"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i><span>Add to bag</span></button>
               </div>
             </div>
           </div>
@@ -299,8 +300,8 @@
           <p>Dreaming of your own lip gloss brand? Get everything in one place — cute tubes, pigments, versagel, flavouring oils, glitters and packaging.</p>
           <ul class="lab-list" id="labList"></ul>
           <div class="lab-ctas">
-            <button class="btn btn-white" id="kitBtn"><span>Add Starter’s Kit · <b id="kitPrice"></b></span></button>
-            <button class="btn btn-ghost" id="labShop">Browse the Gloss Lab →</button>
+            <button class="btn btn-white" id="kitBtn"><i class="fa-solid fa-plus" aria-hidden="true"></i><span>Add Starter’s Kit · <b id="kitPrice"></b></span></button>
+            <button class="btn btn-ghost" id="labShop">Browse the Gloss Lab <i class="fa-solid fa-arrow-right arrow" aria-hidden="true"></i></button>
           </div>
         </div>
         <div class="drop-visual">
@@ -318,19 +319,19 @@
       </div>
       <div class="feature-grid">
         <div class="feature reveal">
-          <div class="f-num">1</div>
+          <div class="f-num"><i class="fa-solid fa-heart" aria-hidden="true"></i><b>1</b></div>
           <h4>Pick your faves</h4><p>Browse, choose your colours and add everything you love to your bag.</p>
         </div>
         <div class="feature reveal">
-          <div class="f-num">2</div>
+          <div class="f-num"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i><b>2</b></div>
           <h4>Tap checkout</h4><p>Your order is written up for you automatically — no typing, no stress.</p>
         </div>
         <div class="feature reveal">
-          <div class="f-num">3</div>
+          <div class="f-num"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><b>3</b></div>
           <h4>Send on WhatsApp</h4><p>It opens straight in WhatsApp with Eddy, who confirms payment &amp; delivery.</p>
         </div>
         <div class="feature reveal">
-          <div class="f-num">🎀</div>
+          <div class="f-num"><i class="fa-solid fa-gift" aria-hidden="true"></i><b>4</b></div>
           <h4>Get it, girl</h4><p>Your pretty things arrive packed with love. Now go be a girlie girl.</p>
         </div>
       </div>
@@ -355,8 +356,8 @@
         <h2>Talk to <span class="script">Eddy</span></h2>
         <p>Custom orders, wholesale, gift boxes or just need help picking a colour? Send a message — we reply fast.</p>
         <div class="contact-ctas">
-          <a href="#" class="btn btn-gloss" data-wa><span>💬 WhatsApp 0813 968 8880</span></a>
-          <a href="#" class="btn btn-glass" data-wa="2347049833005">📞 0704 983 3005</a>
+          <a href="#" class="btn btn-gloss" data-wa><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>WhatsApp 0813 968 8880</span></a>
+          <a href="#" class="btn btn-glass" data-wa="2347049833005"><i class="fa-solid fa-phone" aria-hidden="true"></i> 0704 983 3005</a>
         </div>
       </div>
     </section>
@@ -388,9 +389,9 @@
         <span class="logo-word big">Eddies</span>
         <p>Hair accessories, lip gloss &amp; all the pretty little things. Be a girlie girl…</p>
         <div class="socials">
-          <a href="https://www.tiktok.com/@accessories_by_eddy" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.5 2.8 2.4 4.6 5 5"/></svg></a>
-          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" class="fill"/></svg></a>
-          <a href="#" data-wa aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg></a>
+          <a href="https://www.tiktok.com/@accessories_by_eddy" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+          <a href="#" data-wa aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
         </div>
       </div>
       <div class="footer-cols">
@@ -399,7 +400,7 @@
         <div><h5>Say hi</h5><a href="#" data-wa>WhatsApp</a><a href="https://www.tiktok.com/@accessories_by_eddy" target="_blank" rel="noopener">TikTok</a><a href="#">Instagram</a></div>
       </div>
     </div>
-    <div class="footer-base">© <span id="year"></span> Accessories by Eddy · made with 💗 for girlie girls</div>
+    <div class="footer-base">© <span id="year"></span> Accessories by Eddy · made with <i class="fa-solid fa-heart foot-heart" aria-hidden="true"></i> for girlie girls</div>
   </footer>
 
   <!-- ============ CART DRAWER ============ -->
@@ -407,12 +408,12 @@
   <aside class="drawer" id="drawer" aria-label="Shopping bag" aria-hidden="true">
     <div class="drawer-head">
       <h3>Your bag <span class="script">xo</span></h3>
-      <button class="icon-btn close" id="closeDrawer" aria-label="Close bag">✕</button>
+      <button class="icon-btn close" id="closeDrawer" aria-label="Close bag"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
     </div>
     <div class="drawer-items" id="drawerItems" data-lenis-prevent></div>
     <div class="drawer-foot">
       <div class="subtotal"><span>Subtotal</span><strong id="subtotal">₦0</strong></div>
-      <button class="btn btn-gloss full" id="checkoutBtn"><span>Checkout on WhatsApp 💬</span></button>
+      <button class="btn btn-gloss full" id="checkoutBtn"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>Checkout on WhatsApp</span></button>
       <p class="tiny">Eddy will confirm delivery fee &amp; payment details in chat</p>
     </div>
   </aside>
@@ -420,7 +421,7 @@
   <!-- ============ QUICK VIEW ============ -->
   <div class="modal" id="modal" aria-hidden="true">
     <div class="modal-card" data-lenis-prevent>
-      <button class="icon-btn close" id="closeModal" aria-label="Close">✕</button>
+      <button class="icon-btn close" id="closeModal" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
       <div class="modal-media"><img id="modalImg" alt="" /></div>
       <div class="modal-body">
         <span class="kicker" id="modalCat"></span>
@@ -430,13 +431,13 @@
         <div class="variants" id="modalVariants"></div>
         <div class="qty-row">
           <div class="qty">
-            <button id="qtyMinus" aria-label="Decrease">−</button>
+            <button id="qtyMinus" aria-label="Decrease"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
             <span id="qtyVal">1</span>
-            <button id="qtyPlus" aria-label="Increase">+</button>
+            <button id="qtyPlus" aria-label="Increase"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
           </div>
-          <button class="btn btn-gloss" id="modalAdd"><span>Add to bag</span></button>
+          <button class="btn btn-gloss" id="modalAdd"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i><span>Add to bag</span></button>
         </div>
-        <ul class="perks"><li>🎀 Packed with love</li><li>💬 Order on WhatsApp</li><li>🚚 Delivery available</li></ul>
+        <ul class="perks"><li><i class="fa-solid fa-gift" aria-hidden="true"></i> Packed with love</li><li><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Order on WhatsApp</li><li><i class="fa-solid fa-truck-fast" aria-hidden="true"></i> Delivery available</li></ul>
       </div>
     </div>
   </div>
